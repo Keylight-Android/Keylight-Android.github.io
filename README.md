@@ -12,8 +12,11 @@
 
 
 A. Application Android (Java).
+
 B. API (Ruby On Rails) hébergée dans le service Elastic Beanstalk de AWS (Amazon Web Services).
+
 C. Base de données PostgreSQL hébergée dans le service RDS (Relational Database Service) de AWS.
+
 D. Base de données locale Realm permettant de sauvegarder les données utilisateur même si l'application est quittée.
 
 
