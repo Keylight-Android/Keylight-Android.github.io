@@ -8,7 +8,7 @@
 
 ### Architecture du système
 
-![Alt text](/system_architecture.jpg "Architecture du système")
+![Alt text](system_architecture.jpg "Architecture du système")
 
 ## Evaluations utilisateurs
 
