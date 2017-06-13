@@ -8,7 +8,7 @@
 
 ### Architecture du système
 
-![Alt text](system_architecture.jpg "Architecture du système")
+![Alt text](https://github.com/Keylight-Android/Keylight-Android.github.io/blob/master/system_architecture.png "Architecture du système")
 
 ## Evaluations utilisateurs
 
