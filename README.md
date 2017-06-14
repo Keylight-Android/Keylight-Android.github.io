@@ -17,7 +17,7 @@ B. **API** (*Ruby On Rails*) hébergée dans le service *Elastic Beanstalk* de *
 
 C. **Base de données PostgreSQL** hébergée dans le service *RDS* (*Relational Database Service*) de *AWS*.
 
-D. **Base de données locale Realm** permettant de sauvegarder les données utilisateur même si l'application est quittée. Ce choix a été fait afin de gérer plus facilement les objets, et de former dynamiquement les objets Java depuis des objets JSON.
+D. **Base de données locale Realm** permettant de sauvegarder les données utilisateur même si l'application est quittée. Ce choix a été fait afin de gérer plus facilement les objets, et de former dynamiquement les objets Java depuis des objets *JSON*.
 
 
 1. L'application fait une requête à l'API afin de récupérer les nouvelles données.
@@ -39,16 +39,32 @@ L'architecture choisie pour cette application est l'architecture **MVC**.
 
 ```java
 public void doOwnSubscriptions() {
-        final ReactiveXService reactiveXService = ReactiveXService.getInstance(getActivity().getApplicationContext());
-        reactiveXService.subscribeToSaveUserPublishSubject(saveUserObserver);
-        reactiveXService.subscribeToSaveDoorLocksPublishSubject(saveDoorLocksObserver);
-        reactiveXService.subscribeToDeleteDoorLockPublishSubject(deleteDoorLockObserver);
-        reactiveXService.subscribeToSaveSharedKeysPublishSubject(saveSharedKeysObserver);
-        reactiveXService.subscribeToDeleteSharedKeyPublishSubject(deleteSharedKeyObserver);
+    final ReactiveXService reactiveXService = ReactiveXService.getInstance(getActivity()
+        .getApplicationContext());
+    reactiveXService.subscribeToSaveContactsPublishSubject(saveContactsObserver);
+    reactiveXService.subscribeToDeleteContactPublishSubject(deleteContactObserver);
+  }
+
+  Disposable saveContactsDisposable = null;
+
+  final Observer<Integer> saveContactsObserver = new Observer<Integer>() {
+
+    @Override
+    public void onSubscribe(Disposable d) {
+      if (saveContactsDisposable != null) {
+        saveContactsDisposable.dispose();
+      }
+      saveContactsDisposable = d;
     }
+
+    @Override
+    public void onComplete(final Integer nbContactsSaved) {
+      updateUIList();
+    }
+  };
 ```
 
-4. Lorsque le *Controller* reçoit le signal de *ReactiveX*, il fait une requête sur la BDD Realm locale afin de récupérer les objets demandés. Il envoie alors ces objets à la vue qui les affiche en passant par un Adpater. Chaque vue possède un Adapter permettant de représenter les objets reçus au sein de la *View*.
+4. Lorsque le *Controller* reçoit le signal de *ReactiveX*, il fait une requête sur la BDD Realm locale afin de récupérer les objets demandés. Il envoie alors ces objets à la vue qui les affiche en passant par un **Adapter**. Chaque vue possède un *Adapter* permettant de représenter les objets reçus au sein de la *View*.
 
 ### Structure des données
 
