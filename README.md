@@ -34,10 +34,79 @@ L'architecture choisie pour cette application est l'architecture **MVC**.
 ![Architecture MVC](https://raw.githubusercontent.com/Keylight-Android/Keylight-Android.github.io/master/MVC_structure.png "Architecture MVC")
 
 1. L'utilisateur change d'onglet ou refraîchit une liste. La *View* demande au *Controller* les dernières données associées à la requête. Cette requête se fait via un **RecyclerView**, qui sait les requêtes nécessaires pour chaque *View*. Par exemple, le *LocksListFragment* possède un *LocksRecyclerView* qui sait que la requête de rafraichissement consiste à aller chercher les dernières *DoorLocks* et *SharedKeys* du *User*.
+
+```java
+protected void myOnRefresh() {
+    try {
+      getDataRequest();
+    } catch (Exception e) {
+      e.printStackTrace();
+      stopRefreshing();
+    }
+}
+
+
+public void getDataRequest() {
+    final RequestsService requestsService = RequestsService.getInstance(getActivity().getApplicationContext());
+    requestsService.getContacts();
+}
+```
+
 2. Si l'application est connectée à Internet, le *Controller* lance une requête à l'API afin de récupérer les dernières *DoorLocks* et *SharedKeys*. Sinon, il récupère les données sauvegardées dans la BDD Realm locale.
+
+```java
+public void getContacts() {
+
+    if (!isNetworkAvailable()) {
+     	throwNetworkNotAvailable();
+      	return;
+    }
+
+    final String url = this.context.getString(R.string.url_api) + "/contacts";
+
+    final Response.Listener<JSONArray> onResponse = new Response.Listener<JSONArray>() {
+      	@Override
+      	public void onResponse(JSONArray response) {
+        	final DatabaseService databaseService = DatabaseService.getInstance(context);
+        	databaseService.saveContacts(SecureSharedPreferencesService.getInstance(context).getUserId(),
+            response);
+      	}
+    };
+
+    final JsonRequestHelper jsonRequestHelper = new JsonRequestHelper(
+        context,
+        queue,
+        url,
+        RequestType.GET_JSON_ARRAY,
+        null,
+        onResponse,
+        null);
+    jsonRequestHelper.execute();
+}
+```
+
 3. Une fois la requête terminée, la BDD locale Realm stocke les nouvelles données et envoie un signal au *Controller* lui disant que les données sont prêtes. Ce signal est pris en charge par **ReactiveX**. Chaque *Controller* possède des *listener* à certains évènements *ReactiveX* (comme "Realm a fini de sauvegarder les DoorLocks" ou "Realm a fini de supprimer les SharedKeys demandées"), dépendant des données qu'il gère.
 
 ```java
+//------Model-------
+
+public void saveContacts(final Long currentUserId, final JSONArray contacts) {
+    int nbContactsSuccessfullySaved = 0;
+    for (int i = 0; i < contacts.length(); i++) {
+        try {
+            final JSONObject contactJSONObject = contacts.getJSONObject(i);
+            saveContact(currentUserId, contactJSONObject);
+            nbContactsSuccessfullySaved++;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    final ReactiveXService reactiveXService = ReactiveXService.getInstance(context);
+    reactiveXService.fireSaveContactsPublishSubject(nbContactsSuccessfullySaved);
+}
+
+//------Controller-------
+
 public void doOwnSubscriptions() {
     final ReactiveXService reactiveXService = ReactiveXService.getInstance(getActivity().getApplicationContext());
     reactiveXService.subscribeToSaveContactsPublishSubject(saveContactsObserver);
