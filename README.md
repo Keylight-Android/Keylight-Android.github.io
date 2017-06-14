@@ -39,29 +39,28 @@ L'architecture choisie pour cette application est l'architecture **MVC**.
 
 ```java
 public void doOwnSubscriptions() {
-    final ReactiveXService reactiveXService = ReactiveXService.getInstance(getActivity()
-        .getApplicationContext());
+    final ReactiveXService reactiveXService = ReactiveXService.getInstance(getActivity().getApplicationContext());
     reactiveXService.subscribeToSaveContactsPublishSubject(saveContactsObserver);
     reactiveXService.subscribeToDeleteContactPublishSubject(deleteContactObserver);
-  }
+}
 
-  Disposable saveContactsDisposable = null;
+Disposable saveContactsDisposable = null;
 
-  final Observer<Integer> saveContactsObserver = new Observer<Integer>() {
+final Observer<Integer> saveContactsObserver = new Observer<Integer>() {
 
     @Override
     public void onSubscribe(Disposable d) {
-      if (saveContactsDisposable != null) {
-        saveContactsDisposable.dispose();
-      }
-      saveContactsDisposable = d;
+    	if (saveContactsDisposable != null) {
+        	saveContactsDisposable.dispose();
+      	}
+      	saveContactsDisposable = d;
     }
 
     @Override
     public void onComplete(final Integer nbContactsSaved) {
-      updateUIList();
+    	updateUIList();
     }
-  };
+};
 ```
 
 4. Lorsque le *Controller* reçoit le signal de *ReactiveX*, il fait une requête sur la BDD Realm locale afin de récupérer les objets demandés. Il envoie alors ces objets à la vue qui les affiche en passant par un **Adapter**. Chaque vue possède un *Adapter* permettant de représenter les objets reçus au sein de la *View*.
