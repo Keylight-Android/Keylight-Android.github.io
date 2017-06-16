@@ -1,9 +1,41 @@
 <html>
 <head>
+  <link rel="stylesheet" media="screen" href="style.css?v=8may2013">
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+<title>Keylight Android - NF28 Project</title>
+
+  <link rel="stylesheet" media="screen" href="style.css?v=8may2013">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Keylight">
+  <meta name="description" content="A NF28 project">
+  <meta name="robots" content="all">
 </head>
-<body>
+<body id="css-zen-garden">
+  <div class="page-wrapper">
+    <section class="intro" id="zen-intro">
+    <header role="banner">
+      <h1>Keylight</h1>
+      <h2>A NF28 Project</h2>
+    </header>
+
+    <div class="summary" id="zen-summary" role="article">
+      <p>L'objectif de ce projet est de développer une application Android offrant une nouvelle façon de gérer ses clefs. Keylight est une start-up qui développe la 1ere serrure connectée à ouverture lumineuse : elle utilise le flash du smartphone comme moyen d'ouverture.
+Ainsi, l'application Android sera couplée à une API permettant d'interfacer notre base de données et nos applications. Bien que le projet dans le cadre de l'UV NF28 soit l'application Android, le Back-End et le Firmware de la serrure devaient etre développés en parallèle.</p>
+    </div>
+
+    <div class="preamble" id="zen-preamble" role="article">
+      <h3>The Road to Enlightenment</h3>
+      <p>Littering a dark and dreary road lay the past relics of browser-specific tags, incompatible <abbr title="Document Object Model">DOM</abbr>s, broken <abbr title="Cascading Style Sheets">CSS</abbr> support, and abandoned browsers.</p>
+      <p>We must clear the mind of the past. Web enlightenment has been achieved thanks to the tireless efforts of folk like the <abbr title="World Wide Web Consortium">W3C</abbr>, <abbr title="Web Standards Project">WaSP</abbr>, and the major browser creators.</p>
+      <p>The CSS Zen Garden invites you to relax and meditate on the important lessons of the masters. Begin to see with clarity. Learn to use the time-honored techniques in new and invigorating fashion. Become one with the web.</p>
+    </div>
+  </section>
+  <h1>KEYLIGHT Android</h1>
 <h2 id="objectif">Objectif</h2>
+L'objectif de ce projet est de développer une application Android offrant une nouvelle façon de gérer ses clefs. Keylight est une start-up qui développe la 1ere serrure connectée à ouverture lumineuse : elle utilise le flash du smartphone comme moyen d'ouverture.
+Ainsi, l'application Android sera couplée à une API permettant d'interfacer notre base de données et nos applications. Bien que le projet dans le cadre de l'UV NF28 soit l'application Android, le Back-End et le Firmware de la serrure devaient etre développés en parallèle.
 <h2 id="cahier-des-charges">Cahier des charges</h2>
 <h2 id="pr-sentation">Présentation</h2>
 <p>Lors de l&#39;ouverture de l&#39;application, nous arrivons sur le premier onglet, qui est l&#39;onglet <em>Keys</em>. Cette onglet contient toutes les clefs de l&#39;utilisateur, que ce soit ces propres <em>DoorLocks</em> ou des <em>SharedKeys</em> (des clefs d&#39;autres <em>DoorLocks</em> qui lui ont été partagées).</p> Les couleurs sont fixes et permettent de distinguer les différentes <em>DoorLocks</em> et <em>SharedKeys</em>. Ainsi, l'utilisateur peut facilement et rapidement associer mentalement une clef à une couleur. Même si celui-ci ne peut clairement distinguer l'initiale au centre de la bulle selon les conditions extérieures et la luminosité, il peut se fier à se couleur.
@@ -170,5 +202,21 @@ public void onComplete(final Integer nbContactsSaved) {
 </ul>
 <h2 id="evaluations-utilisateurs">Evaluations utilisateurs</h2>
 <h2 id="limites-et-am-liorations-possibles">Limites et améliorations possibles</h2>
+Par manque de temps et d'effectif, certaines fonctionnalités n'ont pas pu être implémentées :
+<ul>
+  <li>
+    <strong>L'affichage du temps restant au niveau des SharedKeys</strong>: autant au niveau de la modale d'informations lors d'un appui long, qu'au niveau de la liste des accès d'une <em>DoorLock</em>, le serveur devrait pouvoir nous renvoyer le temps restant d'une <em>SharedKey</em>. Ce travail sera effectué au niveau de l'API : lors du renvoi des <em>SharedKeys</em> associées à une <em>DoorLock</em> (suite à une requête), l'API devra calculer le temps restant et l'insérer dans l'objet <em>JSON</em> retourné. En effet, un tel calcul ne doit pas être effectué au niveau de l'application, celle-ci devant avoir le moins de logique possible pour rendre la rendre plus légère.
+  </li>
+  <li>
+    <strong>La géolocalisation de l'utilisateur</strong> : pourvoir géolocaliser l'utilisateur permet de lui envoyer une notification lorsqu'il approche de chez lui, et de lui proposer de lancer le flash depuis son écran de verrouillage. Cela limite alors drastiquement le nombre de <strong>taps</strong> nécessaires avant l'ouverture de la porte. Lorsque l'utilisateur se trouve dans l'application, nous pourrions alors mettre en avant les clefs les plus suceptibles d'etre utilisées en fonction de sa position géographique. Cette fonctionnalité pourrait être implémentée au niveau interne de l'application : l'application stocke les addresses des serrures. Ainsi, il suffit de récupérer la position de l'utilisateur et d'envoyer une notification dès qu'il s'approche de l'une d'elles.
+  </li>
+  <li>
+    <strong>La gestion intelligente des couleurs des clefs</strong> : dans la dernière version de l'application, les couleurs sont codées en dur et ne sont alors ni modifiables, ni similaires pour une même clef entre deux smartphones différents. Nous voulions mettre en place le système suivant : pouvoir préciser le type de la serrure au moment de son ajout (porte d'entrée, porte de garage, portail, porte secondaire, etc...). Ainsi, il serait plus aisé de reconnaitre la serrure avec son code couleur, sans avoir besoin de vérifier son nom. Ce code couleur serait alors commun à tous les smartphones.
+  </li>
+  <li>
+    <strong>La gestion des groupes de clefs</strong> : pouvoir regrouper les clefs automatiquement en fonction du logement. Ainsi, lors de l'ouverture de l'application, seuls les logements seraient affichés. Chaque logement serait représenté par une bulle. Si l'on clique sur cette bulle, nous avons accès à l'ensemble des clefs de ce logement. Cette fonctionnalité est importante et nous n'avons pas eu le temps de l'implémenter car elle nécessite une étape important : le couplage de la serrure avec le <strong>Bridge</strong>. Le <strong>Bridge</strong> est un dispositif servant de passerelle entre la serrure et notre serveur. Un Bridge est commun à toutes les serrures d'un logement, et c'est cela qui permet de regrouper les serrures au niveau du serveur. En effet, lors du couplage, la serrure est associée au Bridge du logement. Ce n'est pas l'adresse qui permet de les relier, car cette adresse ne sera rentrée que lors de l'installation de la 1ere serrure au sein du logement.
+  </li>
+</ul>
+</div>
 </body>
 </html>
