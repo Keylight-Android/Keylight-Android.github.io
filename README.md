@@ -4,6 +4,12 @@
 
 ## Présentation
 
+Lors de l'ouverture de l'application, nous arrivons sur le premier onglet, qui est l'onglet *Keys*. Cette onglet contient toutes les clefs de l'utilisateur, que ce soit ces propres *DoorLocks* ou des *SharedKeys* (des clefs d'autres *DoorLocks* qui lui ont été partagées).
+
+![Onglet Keys](https://raw.githubusercontent.com/Keylight-Android/Keylight-Android.github.io/master/locks_tab.png "Onglet Keys")
+
+
+
 ## Architecture
 
 ### Architecture du système

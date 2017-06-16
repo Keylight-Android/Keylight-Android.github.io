@@ -1,0 +1,174 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+</head>
+<body>
+<h2 id="objectif">Objectif</h2>
+<h2 id="cahier-des-charges">Cahier des charges</h2>
+<h2 id="pr-sentation">Présentation</h2>
+<p>Lors de l&#39;ouverture de l&#39;application, nous arrivons sur le premier onglet, qui est l&#39;onglet <em>Keys</em>. Cette onglet contient toutes les clefs de l&#39;utilisateur, que ce soit ces propres <em>DoorLocks</em> ou des <em>SharedKeys</em> (des clefs d&#39;autres <em>DoorLocks</em> qui lui ont été partagées).</p> Les couleurs sont fixes et permettent de distinguer les différentes <em>DoorLocks</em> et <em>SharedKeys</em>. Ainsi, l'utilisateur peut facilement et rapidement associer mentalement une clef à une couleur. Même si celui-ci ne peut clairement distinguer l'initiale au centre de la bulle selon les conditions extérieures et la luminosité, il peut se fier à se couleur.
+<p><img src="locks_tab.png" alt="Onglet Keys" title="Onglet Keys" width="300"></p>
+Sur cet onglet l'utilisateur peut faire plusieurs choses :
+<ol>
+  <li>
+    Ajouter une <em>DoorLock</em> en cliquant sur le bouton <strong>+</strong>. Cela ouvre alors une modale permettant de renseigner les informations de cette <em>DoorLock</em>.
+    <p><img src="add_lock.png" alt="Ajout de DoorLock" title="Ajout de DoorLock" width="300"></p>
+  </li>
+  <li>
+    Déclencher le flash du téléphone par un simple <strong>tap</strong> sur une bulle. Le flash transmet alors un code en binaire à la serrure qui s'ouvre si ce code est correct. 
+  </li>
+  <li>
+    Accéder aux différentes actions que l'on peut effectuer sur une <em>DoorLock</em> par un appui long sur une bulle.
+    <p><img src="actions_lock.png" alt="Actions" title="Actions" width="300"></p>
+    Si nous n'avons pas un accès administrateur à la serrure en question, un appui long ouvre simplement les informations relatives à la serrure :
+    <p><img src="shared_key_info.png" alt="SharedKey info" title="SharedKey info" width="300"></p>
+  </li>
+</ol>
+Les différentes actions que l'on peut effectuer sur une serrure dont nous sommes l'administrateur sont les suivantes :
+<ol>
+  <li>
+    Accéder aux informations générales de la <em>DoorLock</em>
+    <p><img src="lock_info.png" alt="DoorLock info" title="DoorLock info" width="300"></p>
+    A partir de cette modale, nous pouvons accéder à la liste des personnes qui ont accès à la serrure :
+    <p><img src="shared_with.png" alt="Liste des accès" title="Liste des accès" width="300"></p>
+    Et nous pouvons partager la serrure en cliquant sur le bouton de partage en bas de l'écran, modifier des accès existants, ou les supprimer :
+    <p><img src="action_shared_with.png" alt="Actions accès" title="Actions accès" width="300"></p>
+  </li>
+  <li>
+    Partager la serrure à l'un de ses contacts :
+    <p><img src="share.png" alt="Partager" title="Partager" width="300"></p>
+    Une fois la personne choisie, il faut préciser le type d'accès (limité, illimité ou administrateur) :
+    <p><img src="select_access_type.png" alt="Type d'accès" title="Type d'accès" width="300"></p>
+    Enfin, une derniere fenetre permet de vérifier la transaction et de confirmer le partage :
+    <p><img src="confirm_share.png" alt="Confirmation partage" title="Confirmation partage" width="300"></p>
+  </li>
+  <li>
+    Supprimer la serrure
+  </li>
+</ol>
+Pour ce qui est de l'onglet <strong>Contact</strong>, il est possible de supprimer des contacts par un appui long sur le contact, ou d'en ajouter en cliquant sur le bouton <strong>+</strong> :
+<p><img src="contacts_tab.png" alt="Onglet contacts" title="Onglet contacts" width="300"></p>
+<p><img src="add_contact.png" alt="Ajouter contact" title="Ajouter contact" width="300"></p>
+Enfin, pour ce qui est de l'onglet <strong>Info</strong>, l'utilisateur peut modifier les informations liées à son compte :
+<p><img src="settings_tab.png" alt="Onglet info" title="Onglet info" width="300"></p>
+<p><img src="edit_own_info.png" alt="Editer info" title="Editer info" width="300"></p>
+<h2 id="architecture">Architecture</h2>
+<h3 id="architecture-du-syst-me">Architecture du système</h3>
+<p><img src="system_architecture.png" alt="Architecture du système" title="Architecture du système"></p>
+<p>A. <strong>Application Android</strong> (<em>Java</em>).</p>
+<p>B. <strong>API</strong> (<em>Ruby On Rails</em>) hébergée dans le service <em>Elastic Beanstalk</em> de <em>AWS</em> (<em>Amazon Web Services</em>).</p>
+<p>C. <strong>Base de données PostgreSQL</strong> hébergée dans le service <em>RDS</em> (<em>Relational Database Service</em>) de <em>AWS</em>.</p>
+<p>D. <strong>Base de données locale Realm</strong> permettant de sauvegarder les données utilisateur même si l&#39;application est quittée. Ce choix a été fait afin de gérer plus facilement les objets, et de former dynamiquement les objets Java depuis des objets <em>JSON</em>.</p>
+<ol>
+<li>L&#39;application fait une requête à l&#39;API afin de récupérer les nouvelles données.</li>
+<li>L&#39;API fait une requête sur les tables correspondantes de la BDD.</li>
+<li>La BDD retourne les lignes des tables correspondant à la requête.</li>
+<li>L&#39;API renvoie un <em>JSON</em> contenant les objets.</li>
+<li>L&#39;application demande à la BDD locale de formatter les données brutes en objets.</li>
+<li>La BDD locale sauvegarde et renvoie les objets Java.</li>
+</ol>
+<h3 id="architecture-de-l-application">Architecture de l&#39;application</h3>
+<p>L&#39;architecture choisie pour cette application est l&#39;architecture <strong>MVC</strong>.</p>
+<p><img src="MVC_structure.png" alt="Architecture MVC" title="Architecture MVC"></p>
+
+<ol>
+<li>L&#39;utilisateur change d&#39;onglet ou refraîchit une liste. La <em>View</em> demande au <em>Controller</em> les dernières données associées à la requête. Cette requête se fait via un <strong>RecyclerView</strong>, qui sait les requêtes nécessaires pour chaque <em>View</em>. Par exemple, le <em>LocksListFragment</em> possède un <em>LocksRecyclerView</em> qui sait que la requête de rafraichissement consiste à aller chercher les dernières <em>DoorLocks</em> et <em>SharedKeys</em> du <em>User</em>.
+
+<pre>
+protected void myOnRefresh() {
+ try {
+   getDataRequest();
+ } catch (Exception e) {
+   e.printStackTrace();
+   stopRefreshing();
+ }
+}
+public void getDataRequest() {
+    final RequestsService requestsService = RequestsService.getInstance(getActivity().getApplicationContext());
+    requestsService.getContacts();
+}</pre>
+</li>
+<li>Si l&#39;application est connectée à Internet, le <em>Controller</em> lance une requête à l&#39;API afin de récupérer les dernières <em>DoorLocks</em> et <em>SharedKeys</em>. Sinon, il récupère les données sauvegardées dans la BDD Realm locale.
+<pre>
+public void getContacts() {
+
+    if (!isNetworkAvailable()) {
+         throwNetworkNotAvailable();
+          return;
+    }
+
+    final String url = this.context.getString(R.string.url_api) + &quot;/contacts&quot;;
+
+    final Response.Listener&lt;JSONArray&gt; onResponse = new Response.Listener&lt;JSONArray&gt;() {
+          @Override
+          public void onResponse(JSONArray response) {
+            final DatabaseService databaseService = DatabaseService.getInstance(context);
+            databaseService.saveContacts(SecureSharedPreferencesService.getInstance(context).getUserId(),
+            response);
+          }
+    };
+
+    final JsonRequestHelper jsonRequestHelper = new JsonRequestHelper(
+        context,
+        queue,
+        url,
+        RequestType.GET_JSON_ARRAY,
+        null,
+        onResponse,
+        null);
+    jsonRequestHelper.execute();
+}</pre>
+</li>
+<li>Une fois la requête terminée, la BDD locale Realm stocke les nouvelles données et envoie un signal au <em>Controller</em> lui disant que les données sont prêtes. Ce signal est pris en charge par <strong>ReactiveX</strong>. Chaque <em>Controller</em> possède des <em>listener</em> à certains évènements <em>ReactiveX</em> (comme &quot;Realm a fini de sauvegarder les DoorLocks&quot; ou &quot;Realm a fini de supprimer les SharedKeys demandées&quot;), dépendant des données qu&#39;il gère.
+<pre>
+//------Model-------
+public void saveContacts(final Long currentUserId, final JSONArray contacts) {
+    int nbContactsSuccessfullySaved = 0;
+    for (int i = 0; i &lt; contacts.length(); i++) {
+        try {
+            final JSONObject contactJSONObject = contacts.getJSONObject(i);
+            saveContact(currentUserId, contactJSONObject);
+            nbContactsSuccessfullySaved++;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    final ReactiveXService reactiveXService = ReactiveXService.getInstance(context);
+    reactiveXService.fireSaveContactsPublishSubject(nbContactsSuccessfullySaved);
+}
+//------Controller-------
+public void doOwnSubscriptions() {
+    final ReactiveXService reactiveXService = ReactiveXService.getInstance(getActivity().getApplicationContext());
+    reactiveXService.subscribeToSaveContactsPublishSubject(saveContactsObserver);
+    reactiveXService.subscribeToDeleteContactPublishSubject(deleteContactObserver);
+}
+Disposable saveContactsDisposable = null;
+final Observer<Integer> saveContactsObserver = new Observer<Integer>() {
+@Override
+public void onSubscribe(Disposable d) {
+    if (saveContactsDisposable != null) {
+        saveContactsDisposable.dispose();
+      }
+      saveContactsDisposable = d;
+}
+
+@Override
+public void onComplete(final Integer nbContactsSaved) {
+    updateUIList();
+}
+};</pre>
+</li>
+<li>Lorsque le <em>Controller</em> reçoit le signal de <em>ReactiveX</em>, il fait une requête sur la BDD Realm locale afin de récupérer les objets demandés. Il envoie alors ces objets à la vue qui les affiche en passant par un <strong>Adapter</strong>. Chaque vue possède un <em>Adapter</em> permettant de représenter les objets reçus au sein de la <em>View</em>.</li>
+</ol>
+<h3 id="structure-des-donn-es">Structure des données</h3>
+<p><img src="data_structure.png" alt="Architecture des données" title="Architecture des données"></p>
+<ul>
+<li><em>User</em> : Cette classe représente un utilisateur. Il possède des objets <em>Contact</em>, des <em>DoorLock</em> et des <em>SharedKey</em>.</li>
+<li><em>Contact</em> : Cette classe représente la relation entre deux <em>Users</em>. Lorsque d&#39;un <em>User</em> ajoute un autre <em>User</em> via son username ou son email, une demande lui ai envoyée.</li>
+<li><em>DoorLock</em> : Cette classe représente une serrure. Elle est caractérisée par son numéro de série, qui sert à l&#39;activer lors de son installation. Elle possède également une adresse pour permettre de proposer des services et features de localisations à l&#39;utilisateur.</li>
+<li><em>SharedKey</em> : Cette classe représente un accès spécifique à une <em>DoorLock</em> pour un <em>User</em> donné. Chaque <em>SharedKey</em> possède une date de début, de fin et un booléen qui indique si le <em>User</em> est admin est peut alors partager et gérer la <em>DoorLock</em> à son tour.</li>
+</ul>
+<h2 id="evaluations-utilisateurs">Evaluations utilisateurs</h2>
+<h2 id="limites-et-am-liorations-possibles">Limites et améliorations possibles</h2>
+</body>
+</html>
