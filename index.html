@@ -27,6 +27,31 @@
 L'objectif de ce projet est de développer une application Android offrant une nouvelle façon de gérer ses clefs. Keylight est une start-up qui développe la 1ere serrure connectée à ouverture lumineuse : elle utilise le flash du smartphone comme moyen d'ouverture.
 Ainsi, l'application Android sera couplée à une API permettant d'interfacer notre base de données et nos applications. Bien que le projet dans le cadre de l'UV NF28 soit l'application Android, le Back-End et le Firmware de la serrure devaient etre développés en parallèle. Les solutions existantes de nos jours ne s'orientent pas vers une utilisation intuituve et rapide de l'application. Nous souhaitons nous concentrer sur un trvail d'ergonomi et d'User Experience afin que l'utilisateur perde le moins de temps possible à chercher, gérer et utiliser ses clefs.</p>
 <h2 id="cahier-des-charges">Cahier des charges</h2>
+Ci-dessous le cahier des charges que nous souhaitions réaliser :
+<h3>Principales fonctionnalités</h3>
+<ul>
+<li><strong>Ajout de serrures</strong> : L’utilisateur doit pouvoir installer une nouvelles serrure en entrant le numéro de série de l’appareil. Il devient alors le propriétaire de cette serrure.</li>
+
+<li><strong>Organisation des serrures</strong> : L’utilisateur doit pouvoir regrouper les serrures comme il le souhaite ainsi que les agencer afin que cela soit plus pratique pour lui des les retrouver.</li>
+
+<li><strong>Edition des serrures</strong> : L’utilisateur doit avoir la possibilité d’éditer les informations d’une serrure (nom, adresse).</li>
+
+<li><strong>Partage d’une serrure</strong> : L’utilisateur doit avoir la possibilité de donner un accès limité ou non à une serrure à un de ses contacts.</li>
+
+<li><strong>Liste des accès</strong> : L’utilisateur doit pouvoir accéder à la liste des accès autorisés à une serrure. Il doit alors pouvoir les modifier et/ou les supprimer.</li>
+
+<li><strong>Accès partagés</strong> : L’utilisateur doit pouvoir accéder aux serrures qui lui sont partagées. De même que ses propres serrures, il doit pouvoir els organiser comme il le souhaite. Il peut partager une de ces serrures si l’accès qui lui a été attribué est un accès « Admin ». Un « Admin » peut gérer tous les accès à une serrure.</li>
+
+<li><strong>Contacts</strong> : L’utilisateur doit pouvoir ajouter/supprimer des utilisateurs et ainsi gérer sa liste de contacts.</li>
+</ul>
+<h3>Features</h3>
+<ul>
+<li><strong>Notifications</strong>  : Afin de pouvoir ouvrir rapidement un serrure, l’utilisateur doit recevoir une notification à l’approche d’une de ses serrures. Cette notification lui permet d’accéder directement à l’application. Il peut alors lancer le mécanisme d’ouverture (transmission du flash) par le simple déverrouillage de son smartphone.</li>
+
+<li><strong>Informations personnelles</strong> : L’utilisateur doit avoir la possibilité de modifier les informations liées à son compte (identifiant, email, nom, prénom, …).</li>
+
+<li><strong>Historique des accès</strong> : L’utilisateur doit pouvoir accéder à l’historique des verrouillages/déverrouillages des serrures. Chaque entrée doit être accompagnée des informations de la personnes ayant ouvert/fermé la porte.</li>
+</ul>
 <h2 id="pr-sentation">Présentation</h2>
 <p>Lors de l&#39;ouverture de l&#39;application, nous arrivons sur le premier onglet, qui est l&#39;onglet <em>Keys</em>. Cette onglet contient toutes les clefs de l&#39;utilisateur, que ce soit ces propres <em>DoorLocks</em> ou des <em>SharedKeys</em> (des clefs d&#39;autres <em>DoorLocks</em> qui lui ont été partagées).</p> Les couleurs sont fixes et permettent de distinguer les différentes <em>DoorLocks</em> et <em>SharedKeys</em>. Ainsi, l'utilisateur peut facilement et rapidement associer mentalement une clef à une couleur. Même si celui-ci ne peut clairement distinguer l'initiale au centre de la bulle selon les conditions extérieures et la luminosité, il peut se fier à se couleur.
 <p><img src="locks_tab.png" alt="Onglet Keys" title="Onglet Keys" width="300"></p>
@@ -190,7 +215,20 @@ public void onComplete(final Integer nbContactsSaved) {
 <li><em>DoorLock</em> : Cette classe représente une serrure. Elle est caractérisée par son numéro de série, qui sert à l&#39;activer lors de son installation. Elle possède également une adresse pour permettre de proposer des services et features de localisations à l&#39;utilisateur.</li>
 <li><em>SharedKey</em> : Cette classe représente un accès spécifique à une <em>DoorLock</em> pour un <em>User</em> donné. Chaque <em>SharedKey</em> possède une date de début, de fin et un booléen qui indique si le <em>User</em> est admin est peut alors partager et gérer la <em>DoorLock</em> à son tour.</li>
 </ul>
-<h2 id="evaluations-utilisateurs">Evaluations utilisateurs</h2>
+<h2 id="evaluations-utilisateurs">Evaluations</h2>
+
+Pour ce qui est des évaluations, nous avons effectué plusieurs tests utilisateurs informels au fur et à mesure de l'évolution du design. Nous avons mis à disposition des maquettes interactives minimales afin de vérifier l'intuitivité de l'application. Nous voulions savoi si l'utilisateur arrivait à trouver de lui-même comment utiliser les simples fonctionnalités de l'application.
+<p><img src="first_design.png" alt="Premiere maquette" title="Premiere maquette"></p>
+
+Cette première maquette nous a permis de confirmer l'aspect non-intuitif des listes en ce qui concerne les clefs. Lorsque qu'un grand nombre de clefs est présent, il devient alors compliqué de trouver celle que nous cherchons. De plus, la séparation des clefs propres et des clefs partagées n'est pas cohérent : un perte de place est engendrée si la personne ne possède pas de clefs propres et utilise l'application uniquement dans le but d'ouvrir une serrure partagée. Cette première maquette avait été implémentée completement afin de finaliser l'aspect fonctionnel de l'application. IL ne restait plus qu'à trouver la meilleure représentation des clefs.
+
+<p><img src="second_design.png" alt="Seconde maquette" title="Seconde maquette"></p>
+
+Cette deuxième maquette réunie tous les types de clefs au même endroit, et les groupes de clefs permettent de distinguer les différents logements. Néanmoins, la barre d'onglets située dans la partie supérieure de l'écran empêche une bonne fluidité de la navigation. En effet, à une main et sur des smartphones relativement grands, il devient difficile d'atteindre ces onglets.
+
+<p><img src="last_design.png" alt="Dernière maquette" title="Dernière maquette"></p>
+
+
 <h2 id="limites-et-am-liorations-possibles">Limites et améliorations possibles</h2>
 Par manque de temps et d'effectif, certaines fonctionnalités n'ont pas pu être implémentées :
 <ul>
